@@ -1,6 +1,5 @@
-import Link from "next/link";
-import Banner from "./../components/ui/Banner";
-import ItemDirectory from "./../components/ui/ItemDirectory";
+import Banner from "@/components/ui/Banner";
+import ItemDirectory from "@/components/main-page/ItemDirectory";
 
 
 export default function Home() {

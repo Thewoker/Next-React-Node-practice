@@ -1,8 +1,7 @@
 import { Providers } from "./Providers";
-import { NextUIProvider } from "@nextui-org/react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "./../components/ui/Header";
+import Header from "@/components/ui/Header";
 import Head from "next/head";
 import { GiBullHorns } from "react-icons/gi";
 

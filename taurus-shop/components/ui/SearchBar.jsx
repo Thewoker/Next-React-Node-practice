@@ -1,6 +1,6 @@
 import React from 'react'
 import {Input} from "@nextui-org/react";
-import {SearchIcon} from "../SearchIcon";
+import {SearchIcon} from "@/public/SearchIcon";
 
 const SearchBar = () => {
   return (
