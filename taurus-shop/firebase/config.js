@@ -38,9 +38,10 @@ export const createUser = async (email, password) => {
     const errorMessage = error.message;
     console.log(`Error ${errorCode}:\n ${errorMessage}`)
   });
+  return creds;
 }
-export const signIn = (email, password) => {
-  signInWithEmailAndPassword(auth, email, password)
+export const signIn = async (email, password) => {
+  const creds = await signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
@@ -52,6 +53,7 @@ export const signIn = (email, password) => {
     const errorMessage = error.message;
     console.log(`Error ${errorCode}:\n ${errorMessage}`)
   });
+  return creds;
 };
 
 export const logout = () => {

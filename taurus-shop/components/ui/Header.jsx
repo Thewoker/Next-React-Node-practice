@@ -53,7 +53,7 @@ const Header = () => {
           </Link>
         </div>
       </div>
-      <button className="absolute" onClick={() => {logout(); console.log(auth.currentUser)}} >Prueba</button>
+      <button className="absolute" onClick={() => {console.log(auth.currentUser); logout(); console.log(auth.currentUser)}} >Prueba</button>
     </header>
   );
 };
