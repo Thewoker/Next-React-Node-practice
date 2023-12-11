@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
 import { GiBullHorns } from "react-icons/gi";
-import { useRouter } from "next/router";
-import SearchBar from "./SearchBar";
 import { HiOutlineUserCircle, HiOutlineShoppingCart, HiOutlineHeart, } from 'react-icons/hi'
 
 
@@ -19,7 +17,6 @@ const Header = () => {
           </Link>
         </div>
         <div className="col-span-1">
-          <SearchBar className="" />
         </div>
         <div className="col-span-1 flex items-center justify-end gap-5 content-between pr-[2rem]">
           <Link href="/Register" className="flex items-center">
