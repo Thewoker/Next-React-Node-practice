@@ -16,7 +16,7 @@ export const POST = async (request) => {
     if (data.action === "registrarse") {
         createUser(data.email, data.password)
     } else if (data.action === "ingresar") {
-        funcionY()
+        signIn(data.email, data.password)
     }
 
     return NextResponse.json("OK")

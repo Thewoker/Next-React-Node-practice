@@ -1,9 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore} from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, setDoc  } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,19 +20,46 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const auth = getAuth();
 
-
-const auth = getAuth();
-export const createUser = (email, password) => {
-  createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
+export const createUser = async (email, password) => {
+  const creds = await createUserWithEmailAndPassword(auth, email, password)
+  .then(async (userCredential) => {
     // Signed up 
     const user = userCredential.user
+
+    const res = await setDoc(doc(db, "users", user.uid ),({
+      cart: {}
+    }));
+    console.log(user)
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(`Error ${errorCode}:\n ${errorMessage}`)
+  });
+}
+export const signIn = (email, password) => {
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    console.log(user)
     // ...
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
-    // ..
+    console.log(`Error ${errorCode}:\n ${errorMessage}`)
   });
+};
+
+export const logout = () => {
+  signOut(auth)
+    .then(() => {
+      console.log("Logout exitoso");
+    })
+    .catch((error) => {
+      console.log("Error al hacer logout:", error);
+    });
 }
