@@ -1,20 +1,16 @@
 "use client"
+import React from 'react';
+import Image from "next/image";
+import { usePathname } from 'next/navigation'
 
-import { useCartContext } from "@/contexts/CartContext"
-import Boton from "../ui/Boton"
-
-
-
-
-const ProductDetail = ({item}) => {
-    console.log(item)
-    const { addToCart } = useCartContext()
+const ProductDetail = () => {
+    const pathname = usePathname()
 
     return (
-        <div>
-            <Boton onClick={() => addToCart(item)}>Agregar</Boton>
+        <div className="flex">
+            {console.log(`el path es el siguietnen :${pathname}`)}
         </div>
-    )
-}
+    );
+};
 
-export default ProductDetail
+export default ProductDetail;

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
+
 const ProductCard = ({ item }) => {
+
   return (
     <article className="basis-72 shadow-lg rounded">
       <Link href={`/productos/detail/${item.slug}`} className="m-6">

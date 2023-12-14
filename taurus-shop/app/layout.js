@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/ui/Header";
 import Head from "next/head";
 import { GiBullHorns } from "react-icons/gi";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProductProvider } from "@/contexts/ProductContext";
 
 <Head>
   <link rel="icon" href={GiBullHorns} />
@@ -20,10 +22,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          <Header />
-          {children}
-        </Providers>
+        <ProductProvider>
+          <AuthProvider>
+            <Providers>
+              <Header />
+              {children}
+            </Providers>
+          </AuthProvider>
+        </ProductProvider>
       </body>
     </html>
   );
