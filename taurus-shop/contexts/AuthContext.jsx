@@ -2,18 +2,20 @@
 import { auth, db } from "@/firebase/config"
 import { signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { createContext, useContext, useEffect, useState } from "react"
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 
 
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
+    const router = useRouter();
     const [user, setUser] = useState({
         logged: false,
         email: null,
         uid: null,
-        cart: null
+        cart: []
     })
 
     const createUser = async (values) => {
@@ -22,6 +24,7 @@ export const AuthProvider = ({ children }) => {
             const res = await setDoc(doc(db, "users", userCreds.uid), ({
                 cart: {}
             }));
+            router.push('/');
         }
         )
     };
@@ -30,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     const loginUser = async (values) => {
         await signInWithEmailAndPassword(auth, values.email, values.password).then(() => {
             console.log("Login exitoso");
+            router.push('/');
         })
     }
 
@@ -54,12 +58,27 @@ export const AuthProvider = ({ children }) => {
         }
         return null;
     }
-    const addToCart = async (newValue) => {
-        const userRef = doc(db, 'users', user.uid);
-        const docSnapshot = await getDoc(userRef);
-        const userData = docSnapshot.data();
-        const updatedCart = [...userData.cart, newValue];
-        await setDoc(userRef, { cart: updatedCart });
+    const addToCart = async (newValue, count) => {
+        try {
+            if (user) {
+                const userRef = doc(db, 'users', user.uid);
+                const docSnapshot = await getDoc(userRef);
+                const userData = docSnapshot.data();
+                const updatedCart = [...userData.cart, { product: newValue, quantity: count }]; // Agregar el nuevo valor como un objeto con las propiedades "product" y "quantity"
+                decrementInStock(newValue, count);
+                await setDoc(userRef, { cart: updatedCart });
+            }
+        } catch (error) {
+            router.push('/Register');
+        }
+    }
+    const isLoged = () => user ?  router.push('/Register') : router.push('/ShoppingCart')
+    const decrementInStock = async (newValue, count) => {
+        const productRef = doc(db, 'productos', newValue);
+        const productSnapshot = await getDoc(productRef);
+        const productData = productSnapshot.data();
+        const updatedInStock = productData.inStock - count;
+        await updateDoc(productRef, { inStock: updatedInStock });
     }
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -76,7 +95,7 @@ export const AuthProvider = ({ children }) => {
                     logged: false,
                     email: null,
                     uid: null,
-                    cart: null
+                    cart: []
                 })
             }
         })
@@ -88,8 +107,9 @@ export const AuthProvider = ({ children }) => {
             createUser,
             loginUser,
             logout,
-            getCart
-            // addToCart
+            getCart,
+            addToCart,
+            isLoged
         }}>
             {children}
         </AuthContext.Provider>

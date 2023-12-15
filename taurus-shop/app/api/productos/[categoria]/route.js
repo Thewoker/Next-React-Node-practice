@@ -10,7 +10,5 @@ export const GET = async (_, { params }) => {
                     ? mockData
                     : mockData.filter(product => product.type === categoria)
 
-    await sleep(1000)
-
     return NextResponse.json(items)
 }

@@ -10,7 +10,6 @@ import { useAuthContext } from "@/contexts/AuthContext"
 const Header = () => {
   const [isLogoutIconVisible, setLogoutIconVisible] = useState(true);
   const [isRegisterIconVisible, setRegisterIconVisible] = useState(false);
-  const user = auth.currentUser;
   const { logout, getCart } = useAuthContext()
 
   auth.onAuthStateChanged(async user => {
@@ -20,7 +19,6 @@ const Header = () => {
     }else {
       setRegisterIconVisible(true);
       setLogoutIconVisible(false);
-      console.log("No user");
     }
   });
 
