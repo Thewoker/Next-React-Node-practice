@@ -52,9 +52,8 @@ export const AuthProvider = ({ children }) => {
             const userRef = doc(db, 'users', user.uid);
             const docSnapshot = await getDoc(userRef);
             const userData = docSnapshot.data();
-            if (userData && userData.cart) {
-                return userData.cart;
-            }
+            const userCart = userData.cart;
+            return userCart;
         }
         return null;
     }
@@ -71,6 +70,23 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             router.push('/Register');
         }
+    }
+    const rmToCart = async (rmValue, count) => { 
+        if (user) {
+            const userRef = doc(db, 'users', user.uid);
+            const docSnapshot = await getDoc(userRef);
+            const userData = docSnapshot.data();
+            const updatedCart = userData.cart.filter(item => item.product !== rmValue); // Filtrar los elementos que no coincidan con rmValue
+            incrementInStock(rmValue, count);
+            await setDoc(userRef, { cart: updatedCart });
+        }
+    }
+    const incrementInStock = async (newValue, count) => {
+        const productRef = doc(db, 'productos', newValue);
+        const productSnapshot = await getDoc(productRef);
+        const productData = productSnapshot.data();
+        const updatedInStock = productData.inStock + count;
+        await updateDoc(productRef, { inStock: updatedInStock });
     }
     const isLoged = () => user ?  router.push('/Register') : router.push('/ShoppingCart')
     const decrementInStock = async (newValue, count) => {
@@ -109,7 +125,8 @@ export const AuthProvider = ({ children }) => {
             logout,
             getCart,
             addToCart,
-            isLoged
+            isLoged,
+            rmToCart
         }}>
             {children}
         </AuthContext.Provider>

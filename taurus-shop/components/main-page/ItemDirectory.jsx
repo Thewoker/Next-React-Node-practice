@@ -5,18 +5,6 @@ import { Suspense } from "react"
 import Link from 'next/link'
 
 
-export const ItemDirectory = () => {
-  return (
-    <main className="main-conteiner grid grid-cols-6 px-3">
-      <section className="col-span-5 flex justify-center flex-col">
-        <div className="product-conteiner col-span-5 grid grid-cols-4">
-          
-        </div>
-      </section>
-    </main>
-  );
-};
-
 const Productos = () => {
   const [categoria, setCategoria] = useState("all");
   const handleCategoria = (key) => setCategoria(key);
