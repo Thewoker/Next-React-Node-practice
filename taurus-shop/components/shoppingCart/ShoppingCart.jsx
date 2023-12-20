@@ -22,9 +22,13 @@ export default function ShoppingCart() {
     <main className="w-full flex">
       <section className="w-3/5 p-4 overflow-y-auto h-64">
         <h1 className="text-xl font-bold mb-4">Productos</h1>
-        {cartItems?.map((product) => (
-          <ItemCardDetail key={product.slug} item={product} />
-        ))}
+        {Array.isArray(cartItems) ? (
+          cartItems.map((product) => (
+            <ItemCardDetail key={product.slug} item={product} />
+          ))
+        ) : (
+          <p>No hay productos en el carrito.</p>
+        )}
       </section>
       <section className="w-2/5 p-4">
         <h1 className="text-xl font-bold mb-4">Tarjeta</h1>

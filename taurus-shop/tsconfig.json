@@ -30,7 +30,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "app/admin/page.jsx", "app/admin/layout.tsx", "app/admin/@login/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

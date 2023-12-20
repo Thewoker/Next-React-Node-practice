@@ -22,7 +22,7 @@ export default function ShoppinProductDetail({ item }) {
       {product ? (
         <div className='flex flex-row py-1'>
         <button className='bg-red-500 text-white px-7 py-1 rounded mr-3' onClick={()=> rmToCart(item.product, item.quantity)}>X</button>
-        <img src={`/imgs/products/${product.image}`} alt={product.title} className='w-[100px]' />
+        <img src={`${product.image}`} alt={product.title} className='w-[100px]' />
         <div className="px-4">
           <h3 className='text-xl font-bold'>{product.title}</h3>
           <p className='text-gray-500'>{item.quantity}</p>

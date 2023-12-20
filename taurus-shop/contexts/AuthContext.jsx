@@ -19,22 +19,29 @@ export const AuthProvider = ({ children }) => {
     })
 
     const createUser = async (values) => {
-        await createUserWithEmailAndPassword(auth, values.email, values.password).then(async (userCredential) => {
-            const userCreds = userCredential.user
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+            const userCreds = userCredential.user;
             const res = await setDoc(doc(db, "users", userCreds.uid), ({
                 cart: {}
             }));
             router.push('/');
+        } catch (error) {
+            console.log("Error al crear el usuario:", error);
+            // Puedes agregar aquí el manejo de errores específico que desees
         }
-        )
     };
 
 
     const loginUser = async (values) => {
-        await signInWithEmailAndPassword(auth, values.email, values.password).then(() => {
+        try {
+            await signInWithEmailAndPassword(auth, values.email, values.password);
             console.log("Login exitoso");
             router.push('/');
-        })
+        } catch (error) {
+            console.log("Error al iniciar sesión:", error);
+            // Puedes agregar aquí el manejo de errores específico que desees
+        }
     }
 
     const logout = () => {
@@ -48,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const getCart = async () => {
-        if (user && user.uid) {
+        if (user.logged && user.uid) {
             const userRef = doc(db, 'users', user.uid);
             const docSnapshot = await getDoc(userRef);
             const userData = docSnapshot.data();
@@ -68,17 +75,25 @@ export const AuthProvider = ({ children }) => {
                 await setDoc(userRef, { cart: updatedCart });
             }
         } catch (error) {
+            console.log("Error al agregar al carrito:", error);
+            console.log(user);
             router.push('/Register');
+            // Puedes agregar aquí el manejo de errores específico que desees
         }
     }
-    const rmToCart = async (rmValue, count) => { 
-        if (user) {
-            const userRef = doc(db, 'users', user.uid);
-            const docSnapshot = await getDoc(userRef);
-            const userData = docSnapshot.data();
-            const updatedCart = userData.cart.filter(item => item.product !== rmValue); // Filtrar los elementos que no coincidan con rmValue
-            incrementInStock(rmValue, count);
-            await setDoc(userRef, { cart: updatedCart });
+    const rmToCart = async (rmValue, count) => {
+        try {
+            if (user.logged) {
+                const userRef = doc(db, 'users', user.uid);
+                const docSnapshot = await getDoc(userRef);
+                const userData = docSnapshot.data();
+                const updatedCart = userData.cart.filter(item => item.product !== rmValue);
+                incrementInStock(rmValue, count);
+                await setDoc(userRef, { cart: updatedCart });
+            }
+        } catch (error) {
+            console.log("Error al eliminar del carrito:", error);
+            // Puedes agregar aquí el manejo de errores específico que desees
         }
     }
     const incrementInStock = async (newValue, count) => {
@@ -88,7 +103,10 @@ export const AuthProvider = ({ children }) => {
         const updatedInStock = productData.inStock + count;
         await updateDoc(productRef, { inStock: updatedInStock });
     }
-    const isLoged = () => user ?  router.push('/Register') : router.push('/ShoppingCart')
+    const isLoged = async (product, quantity) => {
+        await addToCart(product, quantity);
+        user.logged ?  router.push('/ShoppingCart') : router.push('/Register')
+    }
     const decrementInStock = async (newValue, count) => {
         const productRef = doc(db, 'productos', newValue);
         const productSnapshot = await getDoc(productRef);

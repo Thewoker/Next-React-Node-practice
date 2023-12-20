@@ -55,7 +55,7 @@ const ProductDetail = () => {
     return (
         <div className="flex flex-wrap">
             <div className="w-[50%] md:w-60% p-4">
-                <img src={`/imgs/products/${product.image}`} alt="Product Image" className="w-full h-auto" />
+                <img src={`${product.image}`} alt="Product Image" className="w-full h-auto" />
             </div>
             <div className="w-[40%] md:w-40% space-y-4">
                 <h2 className="text-xl font-bold">{product.title}</h2>
@@ -78,7 +78,7 @@ const ProductDetail = () => {
                 <p className="text-sm">{product.description}</p>
                 <div className="flex justify-between">
                     <button className="w-[calc(50%-0.5rem)] rounded-md bg-[#cfb9a5] text-white py-2 px-4 text-center" onClick={() => addToCart(product.slug, quantity)}>Agregar al carrito</button>
-                    <button className="w-[calc(50%-0.5rem)] rounded-md bg-[#cfb9a5] text-white py-2 px-4 text-center" onClick={() => isLoged()}>Comprar</button>
+                    <button className="w-[calc(50%-0.5rem)] rounded-md bg-[#cfb9a5] text-white py-2 px-4 text-center" onClick={() => isLoged(product.slug, quantity)}>Comprar</button>
                 </div>
             </div>
         </div>
