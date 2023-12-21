@@ -1,3 +1,4 @@
+"use client"
 import { collection, getDocs, query, where } from "firebase/firestore"
 import ProductCard from "./ProductCard"
 import { db } from "@/firebase/config"

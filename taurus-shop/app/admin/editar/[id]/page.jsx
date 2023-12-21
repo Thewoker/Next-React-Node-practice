@@ -7,7 +7,7 @@ import { collection, getDoc, doc, updateDoc } from "firebase/firestore";
 import { db, storage } from "@/firebase/config"
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
-export default function page() {
+export default function Page() {
     const router = useRouter()
     const pathname = usePathname()
     const currentFolder = path.basename(pathname);
