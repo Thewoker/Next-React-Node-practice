@@ -45,7 +45,6 @@ const Register = () => {
                 />
                 <Boton onClick={() => loginUser(values)} className="mr-4">Ingresar</Boton>
                 <Boton onClick={() => createUser(values)}>Registrarme</Boton>
-                <Boton onClick={null} className="mt-2 block">Ingresar con Google</Boton>
             </form>
         </div>
     )
