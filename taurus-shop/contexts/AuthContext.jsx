@@ -4,6 +4,7 @@ import { signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWith
 import { createContext, useContext, useEffect, useState } from "react"
 import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
 
 
 
@@ -25,8 +26,14 @@ export const AuthProvider = ({ children }) => {
             const res = await setDoc(doc(db, "users", userCreds.uid), ({
                 cart: {}
             }));
+            toast.success("Usuario creado correctamente.", {
+                hideProgressBar: true,
+              });
             router.push('/');
         } catch (error) {
+            toast.error(`El usuario no fue creado correctamente. Error: \n${error}`, {
+                hideProgressBar: true,
+              });
             console.log("Error al crear el usuario:", error);
             // Puedes agregar aquí el manejo de errores específico que desees
         }
@@ -37,8 +44,14 @@ export const AuthProvider = ({ children }) => {
         try {
             await signInWithEmailAndPassword(auth, values.email, values.password);
             console.log("Login exitoso");
+            toast.success("Usuario Logueado correctamente.", {
+                hideProgressBar: true,
+              });
             router.push('/');
         } catch (error) {
+            toast.error(`El usuario no pudo loguearse correctamente. Error: \n${error}`, {
+                hideProgressBar: true,
+              });
             console.log("Error al iniciar sesión:", error);
             // Puedes agregar aquí el manejo de errores específico que desees
         }
@@ -48,8 +61,14 @@ export const AuthProvider = ({ children }) => {
         signOut(auth)
             .then(() => {
                 console.log("Logout exitoso");
+                toast.success("Usuario deslogueado correctamente.", {
+                    hideProgressBar: true,
+                  });
             })
             .catch((error) => {
+                toast.error(`Error al desloguearse. Error: \n${error}`, {
+                    hideProgressBar: true,
+                  });
                 console.log("Error al hacer logout:", error);
             });
     }
@@ -74,10 +93,16 @@ export const AuthProvider = ({ children }) => {
                 decrementInStock(newValue, count);
                 await setDoc(userRef, { cart: updatedCart });
             }
+            toast.success("Producto añadido correctamente.", {
+                hideProgressBar: true,
+              });
         } catch (error) {
             console.log("Error al agregar al carrito:", error);
             console.log(user);
             router.push('/Register');
+            toast.error(`El producto no añadido correctamente. Error:\n${error}`, {
+                hideProgressBar: true,
+              });
             // Puedes agregar aquí el manejo de errores específico que desees
         }
     }
@@ -90,8 +115,14 @@ export const AuthProvider = ({ children }) => {
                 const updatedCart = userData.cart.filter(item => item.product !== rmValue);
                 incrementInStock(rmValue, count);
                 await setDoc(userRef, { cart: updatedCart });
+                toast.info("Producto removido correctamente.", {
+                    hideProgressBar: true,
+                  });
             }
         } catch (error) {
+            toast.error(`El producto no se pudo remover correctamente. Error:\n${error}`, {
+                hideProgressBar: true,
+              });
             console.log("Error al eliminar del carrito:", error);
             // Puedes agregar aquí el manejo de errores específico que desees
         }
@@ -105,7 +136,7 @@ export const AuthProvider = ({ children }) => {
     }
     const isLoged = async (product, quantity) => {
         await addToCart(product, quantity);
-        user.logged ?  router.push('/ShoppingCart') : router.push('/Register')
+        user.logged ? router.push('/ShoppingCart') : router.push('/Register')
     }
     const decrementInStock = async (newValue, count) => {
         const productRef = doc(db, 'productos', newValue);

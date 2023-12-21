@@ -10,12 +10,12 @@ import { doc, setDoc  } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBtSVZK12m7TtC_BPlRCmy7oc-7_OJKP8U",
-  authDomain: "coderecommerce-app.firebaseapp.com",
-  projectId: "coderecommerce-app",
-  storageBucket: "coderecommerce-app.appspot.com",
-  messagingSenderId: "723295172185",
-  appId: "1:723295172185:web:c33b6606930c35f39fe348"
+  apiKey: "AIzaSyCC6SxHxiKmA8-hjBwGuBZc3zwd_GLTnSc",
+  authDomain: "coderecommerce-app-30074.firebaseapp.com",
+  projectId: "coderecommerce-app-30074",
+  storageBucket: "coderecommerce-app-30074.appspot.com",
+  messagingSenderId: "256038943319",
+  appId: "1:256038943319:web:4aa415742fe26bf6f04112"
 };
 
 // Initialize Firebase

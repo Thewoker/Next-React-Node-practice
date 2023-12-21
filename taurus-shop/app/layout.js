@@ -5,10 +5,9 @@ import Header from "@/components/ui/Header";
 import Head from "next/head";
 import { GiBullHorns } from "react-icons/gi";
 import { AuthProvider } from "@/contexts/AuthContext";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
-<Head>
-  <link rel="icon" href={GiBullHorns} />
-</Head>;
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +24,7 @@ export default function RootLayout({ children }) {
             <Providers>
               <Header />
               {children}
+              <ToastContainer />
             </Providers>
           </AuthProvider>
       </body>

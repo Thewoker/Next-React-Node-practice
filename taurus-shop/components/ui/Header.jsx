@@ -46,9 +46,6 @@ const Header = () => {
           <Link href="/ShoppingCart" className="flex items-center">
             <HiOutlineShoppingCart className="w-[1.8rem] h-[1.8rem]" />
           </Link>
-          <Link href="/" className="flex items-center">
-            <HiOutlineHeart className="w-[1.8rem] h-[1.8rem]" />
-          </Link>
         </div>
       </div>
     </header>

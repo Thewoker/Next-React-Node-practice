@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { db } from "@/firebase/config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 
 
 const ProductCatalog = () => {
@@ -16,6 +16,21 @@ const ProductCatalog = () => {
 
         fetchProducts();
     }, []);
+
+    const deleteItem = async (slug) => {
+        try {
+            // Obtener la referencia al documento que se desea eliminar
+            const docRef = doc(db, "productos", slug);
+
+            // Eliminar el documento de Firestore
+            await deleteDoc(docRef);
+
+            // Actualizar el estado de los items eliminando el elemento correspondiente
+            setItems((prevItems) => prevItems.filter((item) => item.slug !== slug));
+        } catch (error) {
+            console.error("Error al eliminar el documento:", error);
+        }
+    };
 
     return (
         <div className='container m-auto'>
@@ -39,12 +54,12 @@ const ProductCatalog = () => {
                                 >
                                     Editar
                                 </Link>
-                                <Link
-                                    href={`/admin/delete/${item?.slug}`}
+                                <button
+                                    onClick={() => deleteItem(item?.slug)}
                                     className=' bg-red-600 rounded p-2 text-white mr-2'
                                 >
                                     Eliminar
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     ))

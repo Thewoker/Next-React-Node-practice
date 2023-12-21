@@ -4,9 +4,12 @@ import Boton from "@/components/ui/Boton"
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/firebase/config"
+import { toast } from "react-toastify";
+import { useRouter  } from 'next/navigation'
 
 
 export default function page() {
+    const router = useRouter()
     const [item, setItem] = useState({
         title: "",
         description: "",
@@ -40,12 +43,17 @@ export default function page() {
             ...values,
             image: imageUrl
         })
-            .then(() => console.log('produto agregado'))
+            .then(() => {
+                console.log('produto agregado')
+                toast.success("Producto creado correctamente.", {
+                    hideProgressBar: true,
+                  });
+            })
     };
 
     return (
         <div className='container p-4 m-auto mt-6 max-w-lg'>
-            <Boton onClick={() => router.back()}>Volver</Boton>
+            <Boton onClick={() => router.push("/admin")}>Volver</Boton>
             <form onSubmit={handleSubmit} className='my-12'>
 
                 <label >Título:</label>

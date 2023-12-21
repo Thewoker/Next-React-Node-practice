@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter  } from 'next/navigation'
 import path from 'path';
 import Boton from "@/components/ui/Boton"
 import { collection, getDoc, doc, updateDoc } from "firebase/firestore";
@@ -8,6 +8,7 @@ import { db, storage } from "@/firebase/config"
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 export default function page() {
+    const router = useRouter()
     const pathname = usePathname()
     const currentFolder = path.basename(pathname);
     const [item, setItem] = useState({
@@ -58,8 +59,7 @@ export default function page() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        
+    
         // Subir la foto a Firebase Storage y obtener su URL
         if (file) {
             const storageRef = ref(storage, `images/${file.name}`);
@@ -67,14 +67,23 @@ export default function page() {
             // Después de obtener la URL de la imagen subida
             const downloadURL = await getDownloadURL(storageRef);
             values.image = downloadURL
-            // Actualizar los datos del producto actual en la base de datos
-            await updateDoc(doc(db, 'productos', currentFolder), values);
+    
+            // Verificar si el documento existe antes de actualizarlo
+            const productDocRef = doc(db, 'productos', currentFolder);
+            const productDocSnap = await getDoc(productDocRef);
+    
+            if (productDocSnap.exists()) {
+                // Actualizar los datos del producto actual en la base de datos
+                await updateDoc(productDocRef, values);
+            } else {
+                console.error('El documento no existe');
+            }
         }
     };
 
     return (
         <div className='container p-4 m-auto mt-6 max-w-lg'>
-            <Boton onClick={() => router.back()}>Volver</Boton>
+            <Boton onClick={() => router.push("/admin")}>Volver</Boton>
             <form onSubmit={handleSubmit} className='my-12'>
 
                 <label >Título:</label>
